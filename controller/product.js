@@ -1,4 +1,4 @@
-const product = require("../database/model/product");
+const product = require("../service/product");
 
 // const createProductCtl = (req, res) => {
 //   createProductSv(req.data)
@@ -11,41 +11,47 @@ const product = require("../database/model/product");
 // };
 const createProductCtl = async (req, res) => {
   try {
-    await product.createProductSv(req.body);
-    res.json({
-      msg: "ok",
-    });
+    const result = await product.createProductSv(req.body);
+    return res.status(201).json({ msg: "ok", data: result });
   } catch (error) {
-    res.status(400).json({ msg: "err" });
+    res.status(400).json({ msg: "err", error });
   }
 };
 const updateProductCtl = async (req, res) => {
   try {
-    if (!req.params.id) return res.sendStatus(400);
     await product.updateProductSv(req.params.id, req.body);
     res.json({
-      msg: "update thành công",
+      msg: "ok",
     });
   } catch (error) {
-    res.status(400).json({ msg: "err" });
+    console.log(error);
+    res.status(400).json({ msg: "err", error });
   }
 };
 
 const getDetailProductCtl = async (req, res) => {
   try {
     if (!req.params.id) return res.sendStatus(400);
-    await product.getDetailProductCtl(req.params.id, req.body);
-    return res.status(200).json(response);
+    const result = await product.getProductSv(req.params.id, req.body);
+    return res.status(200).json({ msg: "ok", data: result });
   } catch (error) {
     res.status(400).json({ msg: "err" });
   }
 };
+const getAllProductCtl = async (req, res) => {
+  try {
+    const result = await product.getAllProductSv(req.body);
+    return res.status(200).json({ msg: "ok", data: result });
+  } catch (error) {
+    res.status(400).json({ msg: "err" });
+  }
+};
+
 const deleteProductCtl = async (req, res) => {
   try {
     if (!req.params.id) return res.sendStatus(400);
-    await product.deleteBook(req.params.id);
-    if (!deleteProductCtl) return res.sendStatus(500);
-    return res.status(200).send("deletebook successful!!!!!");
+    await product.deleteProductSv(req.params.id);
+    return res.status(200).json({ msg: "delete success" });
   } catch (error) {
     console.log(error);
   }
@@ -56,4 +62,5 @@ module.exports = {
   updateProductCtl,
   getDetailProductCtl,
   deleteProductCtl,
+  getAllProductCtl,
 };
