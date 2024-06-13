@@ -19,10 +19,10 @@ const createProductCtl = async (req, res) => {
 };
 const updateProductCtl = async (req, res) => {
   try {
-    await product.updateProductSv(req.params.id, req.body);
-    res.json({
-      msg: "ok",
-    });
+    const result = await product.updateProductSv(req.params.id, req.body);
+    return res
+      .status(200)
+      .json({ msg: "Update sản phẩm thành công", data: result });
   } catch (error) {
     console.log(error);
     res.status(400).json({ msg: "err", error });
@@ -40,10 +40,10 @@ const getDetailProductCtl = async (req, res) => {
 };
 const getAllProductCtl = async (req, res) => {
   try {
-    const result = await product.getAllProductSv(req.body);
-    return res.status(200).json({ msg: "ok", data: result });
+    const result = await product.getAllProductSv();
+    return result.status(200).json({ data: result });
   } catch (error) {
-    res.status(400).json({ msg: "err" });
+    return res.status(404).json({ msg: "err" });
   }
 };
 
