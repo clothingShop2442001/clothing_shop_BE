@@ -2,8 +2,22 @@ const user = require("../service/user");
 
 const createUserCtl = async (req, res) => {
   try {
+    const { fullname, email, phoneNumber, password, confirmPassword } =
+      req.body;
+    const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+    const isCheckEmail = reg.test(email);
+    if (!isCheckEmail) {
+      return res.status(400).json({ msg: "Email không đúng định dạng" });
+    } //else if (password !== confirmPassword) {
+    //   return res
+    //     .status(400)
+    //     .json({ msg: "Vui lòng nhập đúng mật khẩu đã nhập" });
+    // }
+
     const result = await user.createUserSv(req.body);
-    return res.status(201).json({ msg: "ok", data: result });
+    return res
+      .status(201)
+      .json({ msg: "Đã thêm người dùng thành công", data: req.body });
   } catch (error) {
     res.status(400).json({ msg: "err", error });
   }
