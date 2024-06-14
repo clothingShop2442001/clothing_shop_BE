@@ -35,7 +35,7 @@ const getUserSv = async (id) => {
 
 const getAllUserSv = async (body) => {
   try {
-    const result = await User.find(body);
+    const result = await User.find();
     return result;
   } catch (error) {
     console.log(error);

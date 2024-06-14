@@ -38,9 +38,7 @@ const getAllProductSv = async () => {
   try {
     const result = await Product.find();
     return result;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 module.exports = {

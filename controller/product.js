@@ -33,7 +33,7 @@ const getDetailProductCtl = async (req, res) => {
   try {
     if (!req.params.id) return res.sendStatus(400);
     const result = await product.getProductSv(req.params.id, req.body);
-    return res.status(200).json({ msg: "ok", data: result });
+    return res.status(200).json({ msg: "detail" });
   } catch (error) {
     res.status(400).json({ msg: "err" });
   }
@@ -41,9 +41,9 @@ const getDetailProductCtl = async (req, res) => {
 const getAllProductCtl = async (req, res) => {
   try {
     const result = await product.getAllProductSv();
-    return result.status(200).json({ data: result });
+    return res.status(200).json({ data: result });
   } catch (error) {
-    return res.status(404).json({ msg: "err" });
+    return res.status(404).json({ msg: "Err" });
   }
 };
 
