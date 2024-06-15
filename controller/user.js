@@ -2,22 +2,45 @@ const user = require("../service/user");
 
 const createUserCtl = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, password, confirmPassword } =
-      req.body;
     const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-    const isCheckEmail = reg.test(email);
+    const isCheckEmail = reg.test(req.body.email);
     if (!isCheckEmail) {
-      return res.status(400).json({ msg: "Email không đúng định dạng" });
-    } //else if (password !== confirmPassword) {
-    //   return res
-    //     .status(400)
-    //     .json({ msg: "Vui lòng nhập đúng mật khẩu đã nhập" });
+      return res.status(400).json({ msg: "email không đúng định dạng" });
+    }
+    if (req.body.password !== req.body.confirmpassword) {
+      return res
+        .status(400)
+        .json({ msg: "Mật khẩu của bạn không khớp, vui lòng nhập lại" });
+    }
+    const result = await user.createUserSv(req.body);
+    return res.status(201).json({ msg: "ok", data: result });
+  } catch (error) {
+    res.status(400).json({ msg: "err", error });
+  }
+};
+const logInUserCtl = async (req, res) => {
+  try {
+    const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+    const isCheckEmail = reg.test(req.body.email);
+    //  check email không đúng định dạng
+    if (!isCheckEmail) {
+      return res.status(400).json({ msg: "email không đúng định dạng" });
+    }
+
+    //check chưa nhập email, pw
+    if (req.body.password !== req.body.confirmpassword) {
+      return res
+        .status(400)
+        .json({ msg: "Mật khẩu của bạn không khớp, vui lòng nhập lại" });
+    }
+    //check chưa tồn tại user
+    // const findUser = await user.getUserSv(req.body);
+    // if (!findUser) {
+    //   return res.status(400).json({ msg: "Vui lòng đăng kí tài khoản" });
     // }
 
-    const result = await user.createUserSv(req.body);
-    return res
-      .status(201)
-      .json({ msg: "Đã thêm người dùng thành công", data: req.body });
+    const result = await user.logInUserCtl(req.body);
+    return res.status(201).json({ msg: "ok", data: result });
   } catch (error) {
     res.status(400).json({ msg: "err", error });
   }
@@ -65,4 +88,5 @@ module.exports = {
   getDetailUserCtl,
   getAllUserCtl,
   deleteUserCtl,
+  logInUserCtl,
 };
