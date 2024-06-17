@@ -41,7 +41,7 @@ const getDetailProductCtl = async (req, res) => {
 const getAllProductCtl = async (req, res) => {
   try {
     const result = await product.getAllProductSv();
-    return res.status(200).json({ data: result });
+    return res.status(200).json({ msg: "danh sách sản phẩm", data: result });
   } catch (error) {
     return res.status(404).json({ msg: "Err" });
   }

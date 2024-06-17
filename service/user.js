@@ -2,6 +2,7 @@ const { compare, compareSync } = require("bcrypt");
 const User = require("../database/model/user");
 const { genneralAccessToken } = require("./jwtService");
 const { genneralRefreshToken } = require("./jwtService");
+const { log } = require("winston");
 // import bcrypt from "bcryptjs";
 
 const createUserSv = async (body) => {
@@ -39,7 +40,6 @@ const logInUserCtl = (userLogin) => {
       });
 
       return resolve({
-        msg: "oke",
         access_token: access_token,
         refresh_token: refresh_token,
       });

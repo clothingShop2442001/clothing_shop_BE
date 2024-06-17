@@ -31,7 +31,7 @@ const getDetailOrderCtl = async (req, res) => {
 const getAllOrderCtl = async (req, res) => {
   try {
     const result = await order.getAllOrderSv();
-    return res.status(200).json({ data: result });
+    return res.status(200).json({ msg: "Danh sách đặt hàng", data: result });
   } catch (error) {
     return res.status(404).json({ msg: "err" });
   }
