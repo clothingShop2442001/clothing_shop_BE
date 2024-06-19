@@ -21,23 +21,11 @@ const createUserCtl = async (req, res) => {
 const logInUserCtl = async (req, res) => {
   try {
     const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-    const isCheckEmail = reg.test(req.body.email);
+    const isCheckEmail = reg.test(req.body.username);
     //  check email không đúng định dạng
     if (!isCheckEmail) {
       return res.status(400).json({ msg: "email không đúng định dạng" });
     }
-
-    //check chưa nhập email, pw
-    if (req.body.password !== req.body.confirmpassword) {
-      return res
-        .status(400)
-        .json({ msg: "Mật khẩu của bạn không khớp, vui lòng nhập lại" });
-    }
-    //check chưa tồn tại user
-    // const findUser = await user.getUserSv(req.body);
-    // if (!findUser) {
-    //   return res.status(400).json({ msg: "Vui lòng đăng kí tài khoản" });
-    // }
 
     const result = await user.logInUserCtl(req.body);
     return res.status(201).json({ msg: "ok", data: result });

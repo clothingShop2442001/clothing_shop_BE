@@ -7,19 +7,29 @@ const { log } = require("winston");
 
 const createUserSv = async (body) => {
   try {
-    const result = await User.create(body);
+    const { userName, fullname, email, phoneNumber, password } = body;
+    const payload = {
+      userName,
+      fullname,
+      email,
+      phoneNumber,
+      password,
+      role: "User",
+    };
+    const result = await User.create(payload);
     return result;
   } catch (err) {
     return err;
   }
 };
+
 const logInUserCtl = (userLogin) => {
   return new Promise(async (resolve, reject) => {
-    const { fullname, email, phoneNumber, password, confirmpassword } =
+    const { fullname, username, phoneNumber, password, confirmpassword } =
       userLogin;
     try {
       const checkUser = await User.findOne({
-        email: email,
+        email: username,
       });
       if (checkUser === null) {
         resolve({ msg: "Bạn chưa đăng kí" });
@@ -27,7 +37,7 @@ const logInUserCtl = (userLogin) => {
 
       const comparePassword = compare(password, checkUser.password);
       if (!comparePassword) {
-        return resolve({ msg: "Sai email hoặc mật khẩu " });
+        return resolve({ msg: "Sai email hoặc mật khẩu" });
       }
       const access_token = await genneralAccessToken({
         _id: checkUser.id,
@@ -42,6 +52,7 @@ const logInUserCtl = (userLogin) => {
       return resolve({
         access_token: access_token,
         refresh_token: refresh_token,
+        role: checkUser.role,
       });
     } catch (error) {}
   });
